@@ -1,5 +1,6 @@
 //! Generate documentation for clap command-line tools
 
+static TEMPLATE_FILE: &'static [u8] = include_bytes!("./test.html");
 
 #[allow(dead_code)]
 // Ensure that doc tests in the README.md file get run.
@@ -13,33 +14,24 @@ use std::fmt::Write;
 use clap::{Arg, Command};
 use ramhorns::{Content, Template};
 
-const OPTIONS_TEMPLATE: &str = "
-<div class=\"code\">
-  <h4>Options</h4>
-  {options}
-</div>";
-
-const ARG_TEMPLATE: &str = "
-<div class=\"code\">
-    <h4>Options</h4>
-    {{#options}}
-    <div class=\"\">
-        <div class=\"\"><pre>{{flags}}<pre></div><div><pre>{{description}}</pre></div>
-    </div>
-    {{/options}}
-</div>";
-
-
-
 #[derive(Content)]
 struct FmtArg<'a> {
-    flags: &'a str,
+    flags: String,
+    description: &'a str
+}
+
+#[derive(Content)]
+struct FmtCmd<'a> {
+    flags: String,
     description: &'a str
 }
 
 
 #[derive(Content)]
-struct FmtOptions<'a> {
+struct FmtCommands<'a> {
+    title: String,
+    description: String,
+    commands: Vec<FmtCmd<'a>>,
     options: Vec<FmtArg<'a>>,
 }
 
@@ -82,8 +74,9 @@ fn write_help(buffer: &mut String, command: &clap::Command) {
         None => format!("`{}`", command.get_name()),
     };
 
-    writeln!(buffer, "# Command-Line Help for {title_name}\n").unwrap();
 
+
+    writeln!(buffer, "# Command-Line Help for {title_name}\n").unwrap();
     writeln!(
         buffer,
         "This document contains the help content for the `{}` command-line program.\n",
@@ -92,6 +85,14 @@ fn write_help(buffer: &mut String, command: &clap::Command) {
     .unwrap();
 
     build_cmd(&command);
+
+    // let host_str = std::str::from_utf8(TEMPLATE_FILE).unwrap();
+    // let tpl = Template::new(host_str).unwrap();
+    // let rendered = tpl.render(&FmtCommands {
+    //     title: title_name,
+    //     description: buffer,
+    //     options
+    // });
 }
 
 struct HlpCmd {
@@ -113,11 +114,6 @@ impl HlpCmd {
             Some(value) => value.to_string(),
             None => String::new(),
         };
-
-        // let long_about = match cmd.get_long_about() {
-        //     Some(value) => value.to_string(),
-        //     None => String::new(),
-        // };
 
         let long_flag = match cmd.get_long_flag() {
             Some(value) => format!("--{}", value),
@@ -161,32 +157,32 @@ impl HlpCmd {
     }
 
     fn print(&self) {
-        println!("{}", &self.short_about);
-        println!("\n");
+        let title = self.name.to_owned();
 
         self.print_commands();
 
+        let mut options: Vec<FmtArg> = Vec::new();
         if !self.options.is_empty() {
-            println!("Options");
-
-            let mut options: Vec<FmtArg> = Vec::new();
             for arg in self.options.iter() {
 
-                let flags = arg.fmt_flags();
-                let flags = flags.to_owned();
                 options.push(FmtArg {
-                    flags: "pew",
+                    flags: arg.fmt_flags(),
                     description: &arg.description,
                 });
             }
 
-            let tpl = Template::new(ARG_TEMPLATE).unwrap();
-            let rendered = tpl.render(&FmtOptions {
-                options
-            });
 
-            println!("{}", rendered);
         }
+
+        let host_str = std::str::from_utf8(TEMPLATE_FILE).unwrap();
+        let tpl = Template::new(host_str).unwrap();
+        let rendered = tpl.render(&FmtCommands {
+            title,
+            description: self.short_about.to_owned(),
+            commands: Vec::new(),
+            options
+        });
+        println!("{}", rendered);
     }
 
     fn calculate_width(&self) -> usize {
@@ -214,9 +210,9 @@ impl HlpCmd {
         return width;
     }
 
-    fn print_commands(&self) {
+    fn print_commands(&self) -> String {
         if self.commands.is_empty() {
-            return;
+            return String::new();
         }
 
         let width = self.calculate_width();
@@ -248,8 +244,8 @@ impl HlpCmd {
             )
             .unwrap();
         }
-        println!("{}", f);
-        println!("\n");
+
+        f
     }
 }
 
@@ -276,8 +272,8 @@ impl HlpArg {
             true => match arg.get_value_names() {
                 // TODO: What if multiple names are provided?
                 Some([]) => Vec::new(),
-                Some(value) => value.iter().map(|f| format!("&lt;{}&gt;", f)).collect::<Vec::<String>>(),
-                None => vec![format!("&lt;{}&gt;", arg.get_id())],
+                Some(value) => value.iter().map(|f| format!("<{}>", f)).collect::<Vec::<String>>(),
+                None => vec![format!("<{}>", arg.get_id())],
             },
             false => Vec::new(),
         };
@@ -294,70 +290,6 @@ impl HlpArg {
             description,
         }
     }
-
-    // fn print(&self, length: usize) {
-    //     let mut s = String::new();
-    //     self.fmt_flags(&mut s).unwrap();
-
-    //     write!(s, "  {}", self.description).expect("error");
-    //     println!("{}", s);
-    // }
-
-    // fn fmt(&self, s: &mut String, length: usize) -> std::fmt::Result {
-    //     // 2 spaces to indent
-    //     write!(s, "  ")?;
-
-    //     let mut long_comma = String::from("  ");
-    //     if self.long.len() > 0 {
-    //         long_comma = String::from(", ")
-    //     };
-
-    //     // print short arg, and add a comma if a long arg exists
-    //     write!(
-    //         s,
-    //         "{:width$}",
-    //         format!("{}{}", self.short, long_comma),
-    //         width = 2
-    //     )?;
-
-    //     if self.long.len() > 0 {
-    //         // Add a comma if a short flag was there.
-    //         if self.short.len() > 0 {
-    //             write!(s, ",")?
-    //         }
-    //         write!(s, "{}", self.short)?;
-    //     };
-
-    //     let width = length + 2;
-    //     write!(s, "{}", format!("{:width$}", self.long))?;
-
-    //     write!(s, "<{}>  ", self.value)?;
-
-    //     println!("{}", s);
-
-    //     return Ok(());
-    // }
-
-    // fn fmt_flags(&self, s: &mut String) -> std::fmt::Result {
-    //     // print short arg, and add a comma if a long arg exists
-    //     write!(s, "{:min$}", self.short, min = 2)?;
-
-    //     if self.long.len() > 0 {
-    //         // Add a comma if there is a long arg, otherwise just a space
-    //         if self.short.len() > 0 {
-    //             write!(s, ", ")?;
-    //         } else {
-    //             write!(s, "  ")?;
-    //         }
-    //         write!(s, "{}", self.long)?;
-    //     };
-
-    //     if self.values.len() > 0 {
-    //         write!(s, " {}", self.values.join(" "))?;
-    //     }
-
-    //     return Ok(());
-    // }
 
     fn fmt_flags(&self) -> String {
         // print short arg, and add a comma if a long arg exists

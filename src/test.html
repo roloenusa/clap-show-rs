@@ -75,75 +75,16 @@
 
 <body>
   <div class="code">
+    <h3>{{title}}</h3>
+    <div>{{description}}</div>
     <h4>Options</h4>
-
+    {{#options}}
     <div class="">
-      <div class=""><pre>-m, --markdown &lt;Markdown&gt;<pre></div><div><pre>This is the markdown</pre></div>
+      <div class=""><pre>{{flags}}<pre></div><div><pre>{{description}}</pre></div>
     </div>
-    <div class="">
-      <div class=""><pre>-t, --test &lt;Test1&gt; &lt;Test2&gt;<pre></div><div><pre>This is another test</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-r, --barb &lt;BARB&gt;<pre></div><div><pre>This is another test</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>    --o &lt;OTHER&gt;<pre></div><div><pre>This is another test</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-p &lt;testtest&gt;<pre></div><div><pre>This is another test</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-q<pre></div><div><pre>This is another test</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-f, --file &lt;FILE_NAME&gt;<pre></div><div><pre>FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-d, --dir &lt;DIR_NAME&gt;<pre></div><div><pre>DIR NAME is an optional value</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-o, --folder &lt;FOLDER_NAME&gt;<pre></div><div><pre>FOLDER NAME is an optional value</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>-a, --adventure<pre></div><div><pre>Can be used multple times</pre></div>
-    </div>
-    <div class="">
-      <div class=""><pre>   &lt;POSITIONAL&gt;<pre></div><div><pre>This is positional</pre></div>
-    </div>
+    {{/options}}
   </div>
 
-  <div class="container">
-    <h1>Flexbox</h1>
-    <p class="lead">Now that you have learned about flexbox. Why not try it for yourself?</p>
-    <h2>Starter Sandbox</h2>
-    <!-- The container -->
-    <div class="flex-container">
-      <!-- The items -->
-      <div class="flex-item red">
-      </div>
-      <div class="flex-item blue">
-      </div>
-      <div class="flex-item gold">
-      </div>
-      <div class="flex-item green">
-        this is a very flong box
-      </div>
-      <!-- End of items -->
-    </div>
-    <div class="flex-container">
-      <!-- The items -->
-      <div class="flex-item red">
-        abc def ghi jkl mno pqr stu vwx yz
-      </div>
-      <div class="flex-item blue">
-      </div>
-      <div class="flex-item green">
-        abc def ghi jkl mno pqr stu vwx yz
-      </div>
-      <!-- End of items -->
-    </div>
-    <!-- End container -->
-  </div>
 </body>
 
 </html>
