@@ -1,0 +1,149 @@
+<html>
+
+<head>
+  <style>
+    .code {
+      font-family: Menlo, Consolas, 'Lucida Console', monospace;
+
+      background: #333;
+      border-radius: 5px;
+      color: #ddd;
+      padding: 25px;
+
+      width: 1000px;
+      margin: auto;
+    }
+
+    .code > div {
+      /* display: flex; */
+      /* display: grid; */
+      /* grid-template-columns: auto auto; */
+      display: table-row;
+    }
+
+    .code > div > div {
+      padding-left: 15px;
+      display: table-cell;
+      /* width: fit-content; */
+    }
+
+    .code > div > div:last-child > pre {
+      white-space: pre-wrap;       /* css-3 */
+      white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+      white-space: -pre-wrap;      /* Opera 4-6 */
+      white-space: -o-pre-wrap;    /* Opera 7 */
+      word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    }
+
+    .flex-container {
+      display: -webkit-flex;
+      display: flex;
+      width: 300px;
+      background: silver;
+      /*flex-direction: column;*/
+      /*justify-content: flex-end;*/
+      /*align-items: flex-end;*/
+      flex-wrap: wrap;
+      /*align-content: flex-start;*/
+    }
+
+    .flex-item {
+      min-width: 10px;
+      height: 100px;
+      margin: 5px;
+    }
+
+    .red {
+      max-width: 50px;
+      background: tomato;
+    }
+
+    .blue {
+      growth: 2;
+      background: deepskyblue;
+    }
+
+    .gold {
+      background: gold;
+    }
+
+    .green {
+      background: lightgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="code">
+    <h4>Options</h4>
+
+    <div class="">
+      <div class=""><pre>-m, --markdown &lt;Markdown&gt;<pre></div><div><pre>This is the markdown</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-t, --test &lt;Test1&gt; &lt;Test2&gt;<pre></div><div><pre>This is another test</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-r, --barb &lt;BARB&gt;<pre></div><div><pre>This is another test</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>    --o &lt;OTHER&gt;<pre></div><div><pre>This is another test</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-p &lt;testtest&gt;<pre></div><div><pre>This is another test</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-q<pre></div><div><pre>This is another test</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-f, --file &lt;FILE_NAME&gt;<pre></div><div><pre>FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value FILE NAME is a required value</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-d, --dir &lt;DIR_NAME&gt;<pre></div><div><pre>DIR NAME is an optional value</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-o, --folder &lt;FOLDER_NAME&gt;<pre></div><div><pre>FOLDER NAME is an optional value</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>-a, --adventure<pre></div><div><pre>Can be used multple times</pre></div>
+    </div>
+    <div class="">
+      <div class=""><pre>   &lt;POSITIONAL&gt;<pre></div><div><pre>This is positional</pre></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Flexbox</h1>
+    <p class="lead">Now that you have learned about flexbox. Why not try it for yourself?</p>
+    <h2>Starter Sandbox</h2>
+    <!-- The container -->
+    <div class="flex-container">
+      <!-- The items -->
+      <div class="flex-item red">
+      </div>
+      <div class="flex-item blue">
+      </div>
+      <div class="flex-item gold">
+      </div>
+      <div class="flex-item green">
+        this is a very flong box
+      </div>
+      <!-- End of items -->
+    </div>
+    <div class="flex-container">
+      <!-- The items -->
+      <div class="flex-item red">
+        abc def ghi jkl mno pqr stu vwx yz
+      </div>
+      <div class="flex-item blue">
+      </div>
+      <div class="flex-item green">
+        abc def ghi jkl mno pqr stu vwx yz
+      </div>
+      <!-- End of items -->
+    </div>
+    <!-- End container -->
+  </div>
+</body>
+
+</html>

@@ -12,6 +12,7 @@ description = "Autogenerate documentation files for clap base CLIs"
 
 [dependencies]
 clap = "4.*.*"
+ramhorns = "0.14.0"
 
 [dev-dependencies]
 clap = { version = "4.*.*", features = ["derive"] }
