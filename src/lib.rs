@@ -122,22 +122,21 @@ impl Cmd for Command {
         let mut options: Vec<FmtArg> = Vec::new();
         for arg in self.get_arguments() {
 
+            let fmt_arg = FmtArg {
+                flags: arg.fmt_flags(),
+                description: match arg.get_help_heading() {
+                    Some(value) => value.to_string(),
+                    None => match arg.get_help() {
+                        Some(value) => value.to_string(),
+                        None => String::new(),
+                    },
+                }
+            };
+
             if arg.is_positional() {
-                arguments.push(FmtArg {
-                    flags: arg.fmt_flags(),
-                    description: match arg.get_long_help() {
-                        Some(value) => value.to_string(),
-                        None => String::new(),
-                    }
-                });
+                arguments.push(fmt_arg);
             } else {
-                options.push(FmtArg {
-                    flags: arg.fmt_flags(),
-                    description: match arg.get_long_help() {
-                        Some(value) => value.to_string(),
-                        None => String::new(),
-                    }
-                });
+                options.push(fmt_arg);
             }
         }
 
@@ -146,7 +145,7 @@ impl Cmd for Command {
         for command in self.get_subcommands() {
             subcommands.push(FmtCmd {
                 name: command.get_name().to_string(),
-                description: match command.get_after_long_help() {
+                description: match command.get_about() {
                     Some(t) => t.to_string(),
                     _ => String::new(),
                 }
