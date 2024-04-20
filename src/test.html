@@ -45,7 +45,7 @@
 
     <h1>{{cmd_chain}}</h1>
     <div class="code">
-      <div>{{description}}</div>
+      <div>{{paragraph description}}</div>
       <div>USAGE: {{cmd_chain}} {{usage}}</div>
 
       {{#if commands}}
@@ -88,8 +88,10 @@
   {{#each subcommands as |t|}}
   <div class="section">
     <h2>{{t.cmd_chain}}</h2>
+
+    <div>{{paragraph description}}</div>
+
     <div class="code">
-      <div>{{description}}</div>
       <div>USAGE: {{t.cmd_chain}} {{t.usage}}</div>
 
       {{#if t.commands}}
