@@ -2,13 +2,6 @@
 
 static TEMPLATE_FILE: &'static str = include_str!("../data/test.html");
 
-#[allow(dead_code)]
-// Ensure that doc tests in the README.md file get run.
-#[doc(hidden)]
-mod test_readme {
-    #![doc = include_str!("../README.md")]
-}
-
 use clap::{Arg, Command};
 use handlebars::Handlebars;
 use serde_derive::Serialize;
@@ -43,36 +36,19 @@ struct Page {
 }
 
 /// Format the help information for `command` as Markdown.
-pub fn write_help_factory<C: clap::CommandFactory>() -> String {
+///
+/// Output is printed to the standard output, using [`println!`].
+pub fn write_help_factory<C: clap::CommandFactory>() {
     let command = C::command();
 
-    help_command(&command)
+    help_command(&command);
 }
 
 /// Format the help information for `command` as Markdown.
-pub fn help_command(command: &clap::Command) -> String {
-    let mut buffer = String::with_capacity(100);
-
-    write_help(&mut buffer, command);
-
-    buffer
-}
-
-/// Format the help information for `command` as Markdown and print it.
 ///
 /// Output is printed to the standard output, using [`println!`].
-pub fn print_help<C: clap::CommandFactory>() {
-    let command = C::command();
-
-    let mut buffer = String::with_capacity(100);
-
-    write_help(&mut buffer, &command);
-
-    println!("{}", buffer);
-}
-
-fn write_help(buffer: &mut String, command: &clap::Command) {
-    build_cmd(&command);
+pub fn help_command(command: &clap::Command) {
+    build_cmd(command);
 }
 
 fn get_usage(command: &mut Command) -> String {
@@ -214,12 +190,8 @@ fn build_cmd(command: &Command) -> &Command {
     handlebars.register_helper("paragraph", Box::new(paragraph));
 
     handlebars
-        .register_template_string(
-            "template",
-            TEMPLATE_FILE
-        )
-        .unwrap();
-    // handlebars.register_template_file("test_p", "test_p.html").unwrap();
+        .register_template_string("template", TEMPLATE_FILE)
+        .expect("Unable to load base template");
 
     println!(
         "{}",
@@ -253,7 +225,9 @@ fn extract_subcommands(
     }
 }
 
-// implement via bare function
+/// Implement a custom handlebar function that replaces "\n" for <br /> tags
+/// This allows for proper paragraph inside the HTML so short and long descriptions
+/// can be respected.
 fn paragraph (h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, rc: &mut handlebars::RenderContext, out: &mut dyn handlebars::Output) -> handlebars::HelperResult {
     let param = h.param(0).unwrap();
     let param = match param.value().as_str() {
