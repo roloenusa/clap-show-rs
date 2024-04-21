@@ -9,6 +9,10 @@
       width: 1000px;
     }
 
+    .description {
+      padding-bottom: 1rem;
+    }
+
     .code {
       background: #333;
       border-radius: 5px;
@@ -45,7 +49,7 @@
 
     <h1>{{cmd_chain}}</h1>
     <div class="code">
-      <div>{{paragraph description}}</div>
+      <div class="description">{{paragraph description}}</div>
       <div>USAGE: {{cmd_chain}} {{usage}}</div>
 
       {{#if commands}}
@@ -89,7 +93,7 @@
   <div class="section">
     <h2>{{t.cmd_chain}}</h2>
 
-    <div>{{paragraph description}}</div>
+    <div class="description">{{paragraph description}}</div>
 
     <div class="code">
       <div>USAGE: {{t.cmd_chain}} {{t.usage}}</div>

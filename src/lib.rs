@@ -1,6 +1,6 @@
 //! Generate documentation for clap command-line tools
 
-// static TEMPLATE_FILE: &'static [u8] = include_bytes!("./test.html");
+static TEMPLATE_FILE: &'static str = include_str!("../data/test.html");
 
 #[allow(dead_code)]
 // Ensure that doc tests in the README.md file get run.
@@ -9,9 +9,7 @@ mod test_readme {
     #![doc = include_str!("../README.md")]
 }
 
-use std::fmt::Write;
-
-use clap::{Arg, ArgAction, Command};
+use clap::{Arg, Command};
 use handlebars::Handlebars;
 use serde_derive::Serialize;
 
@@ -216,9 +214,9 @@ fn build_cmd(command: &Command) -> &Command {
     handlebars.register_helper("paragraph", Box::new(paragraph));
 
     handlebars
-        .register_template_file(
+        .register_template_string(
             "template",
-            "clap-show-rs/src/test.html",
+            TEMPLATE_FILE
         )
         .unwrap();
     // handlebars.register_template_file("test_p", "test_p.html").unwrap();
