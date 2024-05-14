@@ -73,6 +73,11 @@ fn fmt_cmd(command: &Command, parents: Vec<String>) -> FmtCommands {
     let mut arguments: Vec<FmtArg> = Vec::new();
     let mut options: Vec<FmtArg> = Vec::new();
     for arg in command.get_arguments() {
+        // Ignore the arguments that are hidden
+        if arg.is_hide_set() {
+            continue;
+        }
+
         let fmt_arg = FmtArg {
             flags: fmt_flags(&arg),
             description: match arg.get_help_heading() {
@@ -153,7 +158,7 @@ fn fmt_flags(arg: &Arg) -> String {
 
     // Check if the argument takes multiple values
     let num_vals = arg.get_num_args().unwrap_or_else(|| 1.into());
-    if (num_vals.max_values() > 1) {
+    if num_vals.max_values() > 1 {
         values.push("...".to_string());
     }
 
@@ -188,6 +193,7 @@ fn build_cmd(command: &Command) -> &Command {
     let mut handlebars = Handlebars::new();
 
     handlebars.register_helper("paragraph", Box::new(paragraph));
+    handlebars.register_helper("anchor", Box::new(anchor));
 
     handlebars
         .register_template_string("template", TEMPLATE_FILE)
@@ -228,13 +234,27 @@ fn extract_subcommands(
 /// Implement a custom handlebar function that replaces "\n" for <br /> tags
 /// This allows for proper paragraph inside the HTML so short and long descriptions
 /// can be respected.
-fn paragraph (h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, rc: &mut handlebars::RenderContext, out: &mut dyn handlebars::Output) -> handlebars::HelperResult {
+fn paragraph (h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, _rc: &mut handlebars::RenderContext, out: &mut dyn handlebars::Output) -> handlebars::HelperResult {
     let param = h.param(0).unwrap();
     let param = match param.value().as_str() {
         Some(value) => value,
         None => "",
     };
     let param = param.replace("\n", "<br />");
+
+    out.write(param.as_str())?;
+    Ok(())
+}
+
+/// Implement a custom handlebar function that replaces spaces for dashes
+/// This allows for better styled anchors
+fn anchor(h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, _rc: &mut handlebars::RenderContext, out: &mut dyn handlebars::Output) -> handlebars::HelperResult {
+    let param = h.param(0).unwrap();
+    let param = match param.value().as_str() {
+        Some(value) => value,
+        None => "",
+    };
+    let param = param.replace(" ", "-");
 
     out.write(param.as_str())?;
     Ok(())

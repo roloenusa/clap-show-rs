@@ -1,9 +1,11 @@
 <html>
-
 <head>
   <style>
-    .section {
+    body {
       font-family: Menlo, Consolas, 'Lucida Console', monospace;
+    }
+
+    .section {
       padding: 25px;
       margin: auto;
       width: 1000px;
@@ -40,101 +42,178 @@
       white-space: -o-pre-wrap;    /* Opera 7 */
       word-wrap: break-word;       /* Internet Explorer 5.5+ */
     }
+
+    .main {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .content {
+      padding-left: 3rem;
+      margin-left: 300px;
+      border-left-color: #4f3361;
+      border-left-style: solid;
+      border-left-width: 2px;
+    }
+
+    .anchor, .anchor:visited {
+      text-decoration: none;
+      color: #444;
+      font-size: 0.7em;
+      padding-left: 0.5rem;
+      font-weight: normal;
+    }
+
+    .anchor:hover {
+      color: purple;
+    }
+
+    .menu {
+      padding-top: 3rem;
+      border-right-color: #4f3361;
+      border-right-style: solid;
+      border-right-width: 2px;
+      width: 300px;
+      font-size: .85rem;
+      position: fixed;
+      top: 0;
+    }
+
+    .menu > ul {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 0;
+    }
+
+    .menu-link, .menu-link:visited {
+      display: block;
+      padding-top: 0.3rem;
+      padding-bottom: 0.3rem;
+      padding-left: 0.9rem;
+      padding-right: 0.9rem;
+      text-decoration: none;
+      color: #444;
+    }
+
+    .menu-link:hover {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      color: purple;
+    }
+
+    .menu-link:active {
+      padding-top: 0.3rem;
+      padding-bottom: 0.3rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      color: purple;
+    }
   </style>
 </head>
 
 <body>
-  {{#with main}}
-  <div class="section">
+    <div class="main">
+      <div class="menu">
+        <ul>
+          {{#each subcommands as |t|}}
+          <li><a class="menu-link" href="#{{anchor t.cmd_chain}}">{{t.cmd_chain}}</a></li>
+          {{/each}}
+        </ul>
+      </div>
 
-    <h1>{{cmd_chain}}</h1>
-    <div class="code">
-      <div class="description">{{paragraph description}}</div>
-      <div>USAGE: {{cmd_chain}} {{usage}}</div>
+      <div class="content">
+        {{#with main}}
+        <div class="section">
+          <h1>{{cmd_chain}}</h1>
+          <div class="code">
+            <div class="description">{{paragraph description}}</div>
+            <div>USAGE: {{cmd_chain}} {{usage}}</div>
 
-      {{#if commands}}
-      <div>
-        <h4>Commands</h4>
-        {{#each commands as |t|}}
-        <div class="table">
-          <div class=""><pre>{{t.name}}<pre></div><div><pre>{{t.description}}</pre></div>
+            {{#if commands}}
+            <div>
+              <h4>Commands</h4>
+              {{#each commands as |t|}}
+              <div class="table">
+                <div class=""><pre>{{t.name}}<pre></div><div><pre>{{t.description}}</pre></div>
+              </div>
+              {{/each}}
+            </div>
+            {{/if}}
+
+            {{#if arguments}}
+            <div>
+              <h4>Arguments</h4>
+              {{#each arguments as |t|}}
+              <div class="table">
+                <div class=""><pre>{{t.flags}}<pre></div><div><pre>{{t.description}}</pre></div>
+              </div>
+              {{/each}}
+            </div>
+            {{/if}}
+
+            {{#if options}}
+            <div>
+              <h4>Options</h4>
+              {{#each options as |t|}}
+              <div class="table">
+                <div class=""><pre>{{t.flags}}<pre></div><div><pre>{{t.description}}</pre></div>
+              </div>
+              {{/each}}
+            </div>
+            {{/if}}
+
+          </div>
+        </div>
+        {{/with}}
+
+        {{#each subcommands as |t|}}
+        <div class="section">
+          <h2>{{t.cmd_chain}}<span><a href="#{{anchor t.cmd_chain}}" id="{{anchor t.cmd_chain}}" class="anchor">¶</a></span></h2>
+
+          <div class="description">{{paragraph description}}</div>
+
+          <div class="code">
+            <div>USAGE: {{t.cmd_chain}} {{t.usage}}</div>
+
+            {{#if t.commands}}
+            <div>
+              <h4>Commands</h4>
+              {{#each t.commands as |t2|}}
+              <div class="table">
+                <div class=""><pre>{{t2.name}}<pre></div><div><pre>{{t2.description}}</pre></div>
+              </div>
+              {{/each}}
+            </div>
+            {{/if}}
+
+            {{#if t.arguments}}
+            <div>
+              <h4>Arguments</h4>
+              {{#each t.arguments as |t3|}}
+              <div class="table">
+                <div class=""><pre>{{t3.flags}}<pre></div><div><pre>{{t3.description}}</pre></div>
+              </div>
+              {{/each}}
+            </div>
+            {{/if}}
+
+            {{#if t.options}}
+            <div>
+              <h4>Options</h4>
+              {{#each t.options as |t3|}}
+              <div class="table">
+                <div class=""><pre>{{t3.flags}}<pre></div><div><pre>{{t3.description}}</pre></div>
+              </div>
+              {{/each}}
+            </div>
+            {{/if}}
+
+          </div>
         </div>
         {{/each}}
-      </div>
-      {{/if}}
 
-      {{#if arguments}}
-      <div>
-        <h4>Arguments</h4>
-        {{#each arguments as |t|}}
-        <div class="table">
-          <div class=""><pre>{{t.flags}}<pre></div><div><pre>{{t.description}}</pre></div>
-        </div>
-        {{/each}}
       </div>
-      {{/if}}
-
-      {{#if options}}
-      <div>
-        <h4>Options</h4>
-        {{#each options as |t|}}
-        <div class="table">
-          <div class=""><pre>{{t.flags}}<pre></div><div><pre>{{t.description}}</pre></div>
-        </div>
-        {{/each}}
-      </div>
-      {{/if}}
-
     </div>
-  </div>
-  {{/with}}
-
-  {{#each subcommands as |t|}}
-  <div class="section">
-    <h2>{{t.cmd_chain}}</h2>
-
-    <div class="description">{{paragraph description}}</div>
-
-    <div class="code">
-      <div>USAGE: {{t.cmd_chain}} {{t.usage}}</div>
-
-      {{#if t.commands}}
-      <div>
-        <h4>Commands</h4>
-        {{#each t.commands as |t2|}}
-        <div class="table">
-          <div class=""><pre>{{t2.name}}<pre></div><div><pre>{{t2.description}}</pre></div>
-        </div>
-        {{/each}}
-      </div>
-      {{/if}}
-
-      {{#if t.arguments}}
-      <div>
-        <h4>Arguments</h4>
-        {{#each t.arguments as |t3|}}
-        <div class="table">
-          <div class=""><pre>{{t3.flags}}<pre></div><div><pre>{{t3.description}}</pre></div>
-        </div>
-        {{/each}}
-      </div>
-      {{/if}}
-
-      {{#if t.options}}
-      <div>
-        <h4>Options</h4>
-        {{#each t.options as |t3|}}
-        <div class="table">
-          <div class=""><pre>{{t3.flags}}<pre></div><div><pre>{{t3.description}}</pre></div>
-        </div>
-        {{/each}}
-      </div>
-      {{/if}}
-
-    </div>
-  </div>
-  {{/each}}
-
 </body>
 
 </html>
