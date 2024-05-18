@@ -1,6 +1,6 @@
 //! Generate documentation for clap command-line tools
 
-static TEMPLATE_FILE: &'static str = include_str!("../data/test.html");
+static TEMPLATE_FILE: &'static str = include_str!("../data/template.html");
 
 use clap::{Arg, Command};
 use handlebars::Handlebars;
