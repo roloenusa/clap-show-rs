@@ -1,6 +1,7 @@
 //! Generate documentation for clap command-line tools
 
 static TEMPLATE_FILE: &'static str = include_str!("../data/template.html");
+static CODE_PARTIAL: &'static str = include_str!("../data/code-partial.html");
 
 use clap::{Arg, Command};
 use handlebars::Handlebars;
@@ -82,7 +83,7 @@ fn fmt_cmd(command: &Command, parents: Vec<String>) -> FmtCommands {
             flags: fmt_flags(&arg),
             description: match arg.get_help_heading() {
                 Some(value) => value.to_string(),
-                None => match arg.get_help() {
+                None => match arg.get_long_help() {
                     Some(value) => value.to_string(),
                     None => String::new(),
                 },
@@ -198,6 +199,9 @@ fn build_cmd(command: &Command) -> &Command {
     handlebars
         .register_template_string("template", TEMPLATE_FILE)
         .expect("Unable to load base template");
+    handlebars
+        .register_template_string("code-partial", CODE_PARTIAL)
+        .expect("Unable to load base template");
 
     println!(
         "{}",
@@ -248,7 +252,13 @@ fn paragraph (h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, _
 
 /// Implement a custom handlebar function that replaces spaces for dashes
 /// This allows for better styled anchors
-fn anchor(h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, _rc: &mut handlebars::RenderContext, out: &mut dyn handlebars::Output) -> handlebars::HelperResult {
+fn anchor(
+    h: &handlebars::Helper,
+    _: &Handlebars,
+    _: &handlebars::Context,
+    _rc: &mut handlebars::RenderContext,
+    out: &mut dyn handlebars::Output
+) -> handlebars::HelperResult {
     let param = h.param(0).unwrap();
     let param = match param.value().as_str() {
         Some(value) => value,
@@ -259,3 +269,4 @@ fn anchor(h: &handlebars::Helper, _: &Handlebars, _: &handlebars::Context, _rc: 
     out.write(param.as_str())?;
     Ok(())
 }
+

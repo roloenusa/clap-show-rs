@@ -50,6 +50,10 @@
       word-wrap: break-word;       /* Internet Explorer 5.5+ */
     }
 
+    .arg-description {
+      font-family: monospace;
+    }
+
     .main {
       display: flex;
       flex-direction: row;
@@ -123,99 +127,34 @@
       <div class="menu">
         <ul>
           {{#each subcommands as |t|}}
-          <li><a class="menu-link" href="#{{anchor t.cmd_chain}}">{{t.cmd_chain}}</a></li>
+          <li>
+            <a class="menu-link" href="#{{anchor t.cmd_chain}}">{{t.cmd_chain}}</a>
+          </li>
           {{/each}}
         </ul>
       </div>
 
       <div class="content">
-        {{#with main}}
         <div class="section">
-          <h1>{{cmd_chain}}</h1>
-          <div class="code">
-            <div class="description">{{paragraph description}}</div>
-            <div>USAGE: {{cmd_chain}} {{usage}}</div>
+          <h1>{{main.cmd_chain}}</h1>
 
-            {{#if commands}}
-            <div>
-              <h4>Commands</h4>
-              {{#each commands as |t|}}
-              <div class="table">
-                <div class=""><pre>{{t.name}}<pre></div><div><pre>{{t.description}}</pre></div>
-              </div>
-              {{/each}}
-            </div>
-            {{/if}}
+          <div class="description">{{paragraph main.description}}</div>
 
-            {{#if arguments}}
-            <div>
-              <h4>Arguments</h4>
-              {{#each arguments as |t|}}
-              <div class="table">
-                <div class=""><pre>{{t.flags}}<pre></div><div><pre>{{t.description}}</pre></div>
-              </div>
-              {{/each}}
-            </div>
-            {{/if}}
-
-            {{#if options}}
-            <div>
-              <h4>Options</h4>
-              {{#each options as |t|}}
-              <div class="table">
-                <div class=""><pre>{{t.flags}}<pre></div><div><pre>{{t.description}}</pre></div>
-              </div>
-              {{/each}}
-            </div>
-            {{/if}}
-
-          </div>
+          {{> code-partial data=main}}
         </div>
-        {{/with}}
 
         {{#each subcommands as |t|}}
         <div class="section">
-          <h2>{{t.cmd_chain}}<span><a href="#{{anchor t.cmd_chain}}" id="{{anchor t.cmd_chain}}" class="anchor">¶</a></span></h2>
+          <h2>
+            {{t.cmd_chain}}
+            <span>
+              <a href="#{{anchor t.cmd_chain}}" id="{{anchor t.cmd_chain}}" class="anchor">¶</a>
+            </span>
+          </h2>
 
           <div class="description">{{paragraph description}}</div>
 
-          <div class="code">
-            <div>USAGE: {{t.cmd_chain}} {{t.usage}}</div>
-
-            {{#if t.commands}}
-            <div>
-              <h4>Commands</h4>
-              {{#each t.commands as |t2|}}
-              <div class="table">
-                <div class=""><pre>{{t2.name}}<pre></div><div><pre>{{t2.description}}</pre></div>
-              </div>
-              {{/each}}
-            </div>
-            {{/if}}
-
-            {{#if t.arguments}}
-            <div>
-              <h4>Arguments</h4>
-              {{#each t.arguments as |t3|}}
-              <div class="table">
-                <div class=""><pre>{{t3.flags}}<pre></div><div><pre>{{t3.description}}</pre></div>
-              </div>
-              {{/each}}
-            </div>
-            {{/if}}
-
-            {{#if t.options}}
-            <div>
-              <h4>Options</h4>
-              {{#each t.options as |t3|}}
-              <div class="table">
-                <div class=""><pre>{{t3.flags}}<pre></div><div><pre>{{t3.description}}</pre></div>
-              </div>
-              {{/each}}
-            </div>
-            {{/if}}
-
-          </div>
+          {{> code-partial data=t}}
         </div>
         {{/each}}
 
@@ -224,3 +163,4 @@
 </body>
 
 </html>
+
