@@ -140,7 +140,7 @@
 
           <div class="description">{{paragraph main.description}}</div>
 
-          {{> code-partial data=main}}
+          {{> usage-partial data=main}}
         </div>
 
         {{#each subcommands as |t|}}
@@ -154,7 +154,7 @@
 
           <div class="description">{{paragraph description}}</div>
 
-          {{> code-partial data=t}}
+          {{> usage-partial data=t}}
         </div>
         {{/each}}
 
