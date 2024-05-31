@@ -1,4 +1,30 @@
 //! Generate documentation for clap command-line tools
+//!
+//! It outputs a single HTML page with all the commands, arguments and flags that
+//! the application uses.
+//!
+//! It will use the long help when available, otherwise it will use the
+//! short help.
+//!
+//! # Example
+//!
+//! ```
+//! /// This explains how the application works on details. Probably a good to
+//! /// have an introduction to the commands and the purpose of it.
+//! #[derive(Parser)]
+//! struct Cli {
+//!     command: Commands
+//! }
+//!
+//! #[derive(subcommand)]
+//! enum commands {}
+//!
+//! fn main() {
+//!     let cli = Cli::parse();
+//!     let command = Cli::command();
+//!     clap_show::help_command(&command)
+//! }
+//! ```
 
 static TEMPLATE_FILE: &'static str = include_str!("../data/template.html");
 static CODE_PARTIAL: &'static str = include_str!("../data/usage-partial.html");
