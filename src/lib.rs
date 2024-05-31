@@ -1,7 +1,7 @@
 //! Generate documentation for clap command-line tools
 
 static TEMPLATE_FILE: &'static str = include_str!("../data/template.html");
-static CODE_PARTIAL: &'static str = include_str!("../data/code-partial.html");
+static CODE_PARTIAL: &'static str = include_str!("../data/usage-partial.html");
 
 use clap::{Arg, Command};
 use handlebars::Handlebars;
@@ -200,7 +200,7 @@ fn build_cmd(command: &Command) -> &Command {
         .register_template_string("template", TEMPLATE_FILE)
         .expect("Unable to load base template");
     handlebars
-        .register_template_string("code-partial", CODE_PARTIAL)
+        .register_template_string("usage-partial", CODE_PARTIAL)
         .expect("Unable to load base template");
 
     println!(
